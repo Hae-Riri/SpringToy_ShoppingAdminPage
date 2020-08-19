@@ -1,7 +1,6 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.entity.Item;
 import com.example.study.model.entity.User;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -18,37 +17,60 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create(){
-        User user = new User();
-        //id는 autoIncrement라 자동으로 넣어지니까 우리가 set하지 않아
-        user.setAccount("TestUser03");
-        user.setEmail("TestUser03@gmail.com");
-        user.setPhoneNumber("010-3333-1111");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestUser3");
+        String account = "Test01";
+        String password = "Test01";
+        String status = "REGISTERED";
+        String email = "Test01@gmail.com";
+        String phoneNumber = "010-1111-2222";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminServer";
 
-        //save함수는 User로 반환해, 얜 id도 달고 나오지
+        User user = new User();
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setCreatedBy(createdBy);
+
         User newUser = userRepository.save(user);
-        System.out.println("new User : "+newUser);
+
+        Assert.assertNotNull(newUser);
     }
 
     @Test
     @Transactional
     public void read(){
-        Optional<User> user = userRepository.findById(4L);
 
-        //4를 가져와서 select를 한 담에 방금 연결시킨 1:n관계의 리스트를 가져와서
-        //detail에 내역을 하나씩 넣음
-        user.ifPresent(selectUser ->{
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
 
-            //리스트 형태로 상품이 반환돼, 주문내역이 나옴
-            selectUser.getOrderDetailList().stream().forEach(detail ->{
-                Item item = detail.getItem();
-                System.out.println(item);
+        user.getOrderGroupList().stream().forEach(orderGroup -> {
+            System.out.println("----------------주문묶음----------------");
+            System.out.println("수령지 : "+orderGroup.getRevAddress());
+            System.out.println("수령인 : "+orderGroup.getRevName());
+            System.out.println("총금액 : "+orderGroup.getTotalPrice());
+            System.out.println("총수량 : "+orderGroup.getTotalQuantity());
+
+            System.out.println("----------------주문상세----------------");
+
+            orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                System.out.println("주문 상품 : " +orderDetail.getItem().getName());
+                System.out.println("고객센터 번호 : "+orderDetail.getItem().getPartner().getCallCenter());
+                System.out.println("주문의 상태 : "+ orderDetail.getStatus());
+                System.out.println("도착예정일자 : "+ orderDetail.getArrivalDate());
+
+
+
             });
+
+
         });
 
+        Assert.assertNotNull(user);
         return;
-
     }
 
     @Test
