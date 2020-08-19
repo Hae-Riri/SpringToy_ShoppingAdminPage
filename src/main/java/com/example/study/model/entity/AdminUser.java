@@ -3,31 +3,38 @@ package com.example.study.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@ToString(exclude = {"orderGroup","item"})
-public class OrderDetail {
+public class AdminUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String account;
+
+    private String password;
 
     private String status;
 
-    private LocalDateTime arrivalDate;
+    private String role;
 
-    private Integer quantity;
+    private LocalDateTime lastLoginAt;
 
-    private BigDecimal totalPrice;
+    private int loginFailCount;
+
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
 
     private LocalDateTime createdAt;
 
@@ -36,13 +43,4 @@ public class OrderDetail {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
-
-
-    @ManyToOne
-    private OrderGroup orderGroup;
-
-    //orderDetail : item = n:1, 내가 먼저야
-    //내가 n이니까 Many를 먼저해서 ManyToOne임
-    @ManyToOne
-    private Item item;
 }

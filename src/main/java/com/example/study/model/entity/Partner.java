@@ -9,31 +9,34 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//DB의 table과 동일해 물론 @Table도 있지만 클래스명과 테이블명이 같으면 자동매칭임
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
-@ToString(exclude = {"orderGroup"})//lombok이 User class를 toString할 때 이 단어는 제외함
-public class User {
+@ToString(exclude = {"itemList"})
+public class Partner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String account;
-
-    private String password;
+    private String name;
 
     private String status;
 
-    private String email;
+    private String address;
 
-    private String phoneNumber;
+    private String callCenter;
+
+    private String partnerNumber;
+
+    private String businessNumber;
+
+    private String ceoName;
 
     private LocalDateTime registeredAt;
 
-    private String unregisteredAt;
+    private LocalDateTime unregisteredAt;
 
     private LocalDateTime createdAt;
 
@@ -43,8 +46,10 @@ public class User {
 
     private String updatedBy;
 
+    //외래키 지정
+    private Long categoryId;
 
-    //User : OrderGroup = 1:N
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
-    private List<OrderGroup>orderGroupList;
+    //partner : item = 1:n, 한 개의 파트너가 여러 개의 item을 가짐
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "partner")
+    private List<Item>itemList;
 }
