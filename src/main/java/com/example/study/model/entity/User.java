@@ -1,9 +1,12 @@
 package com.example.study.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString(exclude = {"orderGroup"})//lombok이 User class를 toString할 때 이 단어는 제외함
+@ToString(exclude = {"orderGroupList"})//lombok이 User class를 toString할 때 이 단어는 제외함
+@EntityListeners(AuditingEntityListener.class)
+@Builder //객체 생성 시 생성자로 안하고 간단하게 . 연산자로
+@Accessors(chain=true)//update할 때 set으로 한줄씩 안써도 .연산자로 계속 바꾸기가능
 public class User {
 
     @Id
@@ -33,15 +39,20 @@ public class User {
 
     private LocalDateTime registeredAt;
 
-    private String unregisteredAt;
+    private LocalDateTime unregisteredAt;
 
+    @CreatedDate //자동으로 갱신 됨
     private LocalDateTime createdAt;
 
+    @CreatedBy//최초 생성시에 자동으로 생성 돼
     private String createdBy;
 
+    @LastModifiedDate//우리가 지정안해도 엔티티에 수정이 일어나면 자동으로 값 채워짐
     private LocalDateTime updatedAt;
 
+    @LastModifiedBy
     private String updatedBy;
+
 
 
     //User : OrderGroup = 1:N
