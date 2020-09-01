@@ -12,7 +12,7 @@ import java.util.Optional;
 public class CategoryRepositoryTest extends StudyApplicationTests {
 
     @Autowired
-    private CategoryRepostory categoryRepostory;
+    private CategoryRepository categoryRepostory;
 
     @Test
     public void create(){

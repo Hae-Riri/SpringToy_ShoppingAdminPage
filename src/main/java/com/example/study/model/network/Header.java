@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Header<T> {
 
     //api 통신시간
@@ -24,6 +23,7 @@ public class Header<T> {
     private String description;
 
     private T data;
+
 
     //OK
     public static <T> Header<T> OK(){
@@ -53,6 +53,5 @@ public class Header<T> {
                 .description(description)
                 .build();
     }
-
 
 }

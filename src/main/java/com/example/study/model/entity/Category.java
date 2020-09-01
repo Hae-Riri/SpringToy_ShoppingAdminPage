@@ -26,9 +26,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
     private String type;
+
+    private String title;
 
     @CreatedDate //자동으로 갱신 됨
     private LocalDateTime createdAt;
